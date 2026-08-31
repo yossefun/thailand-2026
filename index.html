@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">תכנון טיול</title>
+  <title id="pageTitle">תאילנד המשפחתית 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -28,7 +28,7 @@
     /* Hero Section */
     .hero {
       background: linear-gradient(135deg, rgba(2, 132, 199, 0.85), rgba(15, 118, 110, 0.85)), 
-                  url('https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=1200&q=80') center/cover;
+                  url('https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80') center/cover;
       color: white; text-align: center; padding: 40px 20px;
       border-bottom-left-radius: 24px; border-bottom-right-radius: 24px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); margin-bottom: 24px;
@@ -134,7 +134,7 @@
           </table>
         </div>
 
-        <h2 class="section-title">תוכנית הטיול היומית</h2>
+        <h2 class="section-title">תוכנית הטיול המשפחתית</h2>
         <div class="timeline" id="overviewTimeline"></div>
 
         <h2 class="section-title">ציוד וארגון מוקדם</h2>
@@ -150,9 +150,9 @@
         <div id="dayContent" class="card-box" style="margin-bottom: 20px;"></div>
 
         <div class="card-box" style="background: #f0fdf4; border-color: #bbf7d0; margin-bottom: 20px;">
-            <h3 style="color: #166534; margin-bottom: 10px;">📖 יומן המסע היומי שלי</h3>
+            <h3 style="color: #166534; margin-bottom: 10px;">📖 יומן המסע המשפחתי</h3>
             <label style="font-size: 0.9rem; color: #166534;">כתיבת רשמים (מאת: <strong id="journalAuthorDisplay">משתמש</strong>):</label>
-            <textarea id="journalText" placeholder="איך היה היום... חוויות ותמונות מהשטח" rows="3"></textarea>
+            <textarea id="journalText" placeholder="איך היה היום... חוויות, טיפים ותמונות מהשטח" rows="3"></textarea>
             <button class="btn-main" style="background: #16a34a;" onclick="addJournalEntry()">הוסף רשמים ליומן המסע</button>
             <div id="journalEntriesList" style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;"></div>
         </div>
@@ -181,7 +181,7 @@
 
     <!-- ATTRACTIONS TAB -->
     <div id="attractions" class="section-block">
-        <h2 class="section-title" style="margin-top:0;">🎡 אטרקציות מומלצות בסביבה</h2>
+        <h2 class="section-title" style="margin-top:0;">🎡 אטרקציות מומלצות בתאילנד</h2>
         <div style="margin-bottom: 20px; display:flex; flex-wrap:wrap; gap:5px;" id="attrFilterButtons"></div>
         <div id="attractionsListContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;"></div>
         
@@ -217,13 +217,13 @@
 
     <!-- EXPENSES TAB -->
     <div id="expenses" class="section-block">
-        <h2 class="section-title" style="margin-top:0;">💰 מחשבון המרה ומעקב הוצאות</h2>
+        <h2 class="section-title" style="margin-top:0;">💰 מחשבון המרה ומעקב הוצאות משפחתי</h2>
         <div class="flex-grid">
             <div class="card-box">
                 <h3>💱 מחשבון המרה (<span id="currCodeLabel"></span> ➔ ILS)</h3>
-                <label>סכום במטבע מקומי:</label>
+                <label>סכום במטבע מקומי (באט):</label>
                 <input type="number" id="localAmount" placeholder="0" oninput="convertCurrency()">
-                <label>שער חליפין (כמה יחידות מקומיות ל-1 ₪):</label>
+                <label>שער חליפין (כמה באט ל-1 ₪):</label>
                 <input type="number" id="exchangeRate" step="0.1" oninput="convertCurrency()">
                 <h4 style="margin-top: 10px;">סה"כ בשקלים: <span id="ilsResult" style="color:var(--primary-dark);">0</span> ₪</h4>
             </div>
@@ -231,7 +231,7 @@
                 <h3>➕ הוספת הוצאה חדשה</h3>
                 <input type="date" id="expDate">
                 <input type="text" id="expDesc" placeholder="תיאור ההוצאה">
-                <input type="number" id="expCost" placeholder="סכום במטבע מקומי">
+                <input type="number" id="expCost" placeholder="סכום בבאט">
                 <select id="expCategory">
                     <option value="אוכל">🍽️ אוכל</option>
                     <option value="תחבורה">🚕 תחבורה</option>
@@ -256,7 +256,7 @@
 
     <!-- PACKING TAB -->
     <div id="packing" class="section-block">
-        <h2 class="section-title" style="margin-top:0;">🧳 רשימת ציוד אישית ומשותפת</h2>
+        <h2 class="section-title" style="margin-top:0;">🧳 רשימת ציוד אישית ומשפחתית</h2>
         <div style="margin-bottom: 20px; display:flex; flex-wrap:wrap; gap:5px;" id="packingPersonsButtons"></div>
         <div class="card-box" style="margin-bottom: 20px; background: var(--card);">
             <h3>הוספת פריט עבור <span id="personTitle" style="color:var(--primary);"></span></h3>
@@ -270,15 +270,15 @@
 
     <!-- BUCKET LIST TAB -->
     <div id="bucket" class="section-block">
-        <h2 class="section-title" style="margin-top:0;">⭐ "יעדים חייבים" – רשימת החלומות המשפחתית</h2>
+        <h2 class="section-title" style="margin-top:0;">⭐ "יעדים חייבים" – רשימת החלומות של המשפחה</h2>
         <div class="card-box">
-            <input type="text" id="bucketPerson" placeholder="שם הנוסע">
+            <input type="text" id="bucketPerson" placeholder="שם בן משפחה">
             <input type="text" id="bucketWish" placeholder="הפעילות / המקום שתרצו לבקר">
             <button class="btn-main" onclick="addBucketItem()">הוסף לרשימה</button>
         </div>
         <div class="table-container" style="margin-top:20px;">
             <table>
-                <thead><tr><th>נוסע</th><th>משאלה / יעד</th><th style="width: 80px;">מחיקה</th></tr></thead>
+                <thead><tr><th>בן משפחה</th><th>משאלה / יעד</th><th style="width: 80px;">מחיקה</th></tr></thead>
                 <tbody id="bucketListTable"></tbody>
             </table>
         </div>
@@ -287,7 +287,7 @@
 
 <script type="module">
 // ==========================================
-// 🌟 FIREBASE & TRIP CONFIGURATION
+// 🌴 FIREBASE & THAILAND TRIP CONFIGURATION
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -303,59 +303,62 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const docRef = doc(db, "trips", "budapest_2026");
+const docRef = doc(db, "trips", "thailand_2026");
 
 const TRIP_CONFIG = {
-    storageKeyPrefix: "budapest_trip_2026_",
+    storageKeyPrefix: "thailand_trip_2026_",
     meta: {
-        pageTitle: "חופשה זוגית בבודפשט 2026 | יוסף ושירן",
-        heroTitle: "חופשה זוגית בבודפשט",
-        heroSubtitle: "יוסף ושירן | מרכז העיר | 3–6 בדצמבר 2026",
-        badge: "בודפשט הקסומה ❄️",
-        startDate: "03.12.26",
-        endDate: "06.12.26"
+        pageTitle: "טיול משפחתי לתאילנד 2026 | יוסף ושירן והילדים",
+        heroTitle: "טיול משפחתי לתאילנד",
+        heroSubtitle: "יוסף, שירן, הבן (16) והבת (14) | פוקט ➔ בנגקוק | 10–24 בנובמבר 2026",
+        badge: "תאילנד הקסומה 🌴",
+        startDate: "10.11.26",
+        endDate: "24.11.26"
     },
     currency: {
-        code: "HUF",
-        name: "פורינט",
-        defaultRate: 98
+        code: "THB",
+        name: "באט",
+        defaultRate: 10
     },
-    familyMembers: ["יוסף", "שירן"],
-    regions: ["מרכז העיר (פשט)", "בודה והגשרים"],
+    familyMembers: ["יוסף", "שירן", "הבן", "הבת"],
+    regions: ["פוקט והאיים", "בנגקוק והסביבה"],
     mapEmbeds: {
-        "מרכז העיר (פשט)": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2695.534803977794!2d19.040235!3d47.497912!2m3!1f0!2f0!3f0!3m2!1f1024!2f768!4f13.1!3m3!1m2!1s0x4741dc3b30649733%3A0x44fcd5432098b671!2sBudapest%2C%20Hungary!5e0!3m2!1she!2sil!4v1650000000000!5m2!1she!2sil",
-        "בודה והגשרים": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2695.534803977794!2d19.032235!3d47.502912!2m3!1f0!2f0!3f0!3m2!1f1024!2f768!4f13.1!3m3!1m2!1s0x4741dc3b30649733%3A0x44fcd5432098b671!2sBuda%2C%20Budapest!5e0!3m2!1she!2sil!4v1650000000000!5m2!1she!2sil"
+        "פוקט והאיים": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253260.40798242498!2d98.2327773204128!3d7.951933099999993!2m3!1f0!2f0!3f0!3m2!1f1024!2f768!4f13.1!3m3!1m2!1s0x305031851b2c452b%3A0x8dd38734e5657ef7!2sPhuket%2C%20Thailand!5e0!3m2!1she!2sil!4v1650000000000!5m2!1she!2sil",
+        "בנגקוק והסביבה": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.999554032156!2d100.4913014749103!3d13.75633128663458!2m3!1f0!2f0!3f0!3m2!1f1024!2f768!4f13.1!3m3!1m2!1s0x30e2990bc577b219%3A0x7d2836269229f379!2sBangkok%2C%20Thailand!5e0!3m2!1she!2sil!4v1650000000000!5m2!1she!2sil"
     },
     quickInfo: [
-        { topic: "טיסת הלוך", details: "03/12: המראה מנתב\"ג ➔ בודפשט (BUD)", notes: "טיסות ישירות" },
-        { topic: "טיסת חזור", details: "06/12: המראה מבודפשט ➔ נתב\"ג", notes: "חזרה לישראל בשעות הערב" },
-        { topic: "לינה בבודפשט", details: "מלון בוטיק במרכז פשט (Váci utca / Deák Ferenc)", notes: "3 לילות | מיקום מרכזי קרוב לרכבת ולמסעדות" }
+        { topic: "טיסת הלוך", details: "10/11: המראה מנתב\"ג ➔ פוקט (HKT)", notes: "טיסה משפחתית לתאילנד" },
+        { topic: "טיסת חזור", details: "24/11: המראה מבנגקוק (BKK) ➔ נתב\"ג", notes: "חזרה לישראל" },
+        { topic: "מסלול כללי", details: "שבוע ראשון בפוקט והאיים + שבוע שני בבנגקוק", notes: "שילוב טבע, חופים ושופינג" }
     ],
     quickChecklistItems: [
-        "דרכונים בתוקף", "מעילים חמים, כפפות וצעיפים (דצמבר באירופה קר!)",
-        "נעלי הליכה נוחות ואוטמות למים", "ביטוח נסיעות לחו\"ל",
-        "כרטיסי אשראי בינלאומיים + קצת מזומן (פורינט/אירו)", "מטענים ומתאם שקע אירופאי"
+        "דרכונים בתוקף (לפחות חצי שנה)", "כרטיסי טיסה וביטוח נסיעות משפחתי",
+        "בגדי ים ובגדי קיץ קלילים", "קרם הגנה חזק ותכשיר נגד יתושים",
+        "מתאם שקע חשמל בינלאומי", "כסף מזומן (דולרים חדשים להמרה) + כרטיסי אשראי"
     ],
     overviewTimeline: [
-        { date: "03/12 (יום ד')", text: "נחיתה בבודפשט, הגעה למלון, התמקמות וסיור ערב ראשון ברחוב וואצי ובשוק האוכל." },
-        { date: "04/12 (יום ה')", text: "סיור בבזיליקת סטפנוס הקדוש, בניין הפרלמנט ההונגרי ושייט ערב על הדנובה מואר." },
-        { date: "05/12 (יום ו')", text: "ביקור בגבעת פטיה, באסטיון הדייגים בבודה, ובילוי במרחצאות חמים (Széchenyi)." },
-        { date: "06/12 (יום ש')", text: "שופינג אחרון, קפה קונדיטוריה מסורתית וטיסה חזרה לישראל." }
+        { date: "10/11 (יום ג')", text: "טיסה משפחתית מנתב\"ג והגעה לפוקט, התמקמות בריזורט ומנוחה." },
+        { date: "11/11 - 16/11", text: "ימי פוקט והאיים: טיולי שייט (פי פי / פאנג נغا), חופים ופעילויות ימיות." },
+        { date: "17/11 (יום שלישי)", text: "מעבר מפוקט לבנגקוק (טיסה פנימית), התמקמות במלון בעיר." },
+        { date: "18/11 - 23/11", text: "ימי בנגקוק: קניוני ענק (MBK, Siam Paragon), שווקים, מקדשים ואטרקציות עירוניות." },
+        { date: "24/11 (יום ג')", text: "שופינג אחרון, התארגנות וטיסת חזור מבנגקוק לישראל." }
     ],
     footerContacts: `
-        <h3>אנשי קשר וחירום בבודפשט</h3>
-        <p><strong>חירום אירופאי:</strong> <a href="tel:112">112</a> | <strong>שגרירות ישראל בבודפשט:</strong> <a href="tel:+3613926200">+36 1 392 6200</a></p>
+        <h3>אנשי קשר וחירום בתאילנד</h3>
+        <p><strong>חירום כללי בתאילנד:</strong> <a href="tel:1155">1155</a> | <strong>שגרירות ישראל בבנגקוק:</strong> <a href="tel:+6622049200">+66 2 204 9200</a></p>
     `,
     attractions: [
-        { id: 1, title: "בניין הפרלמנט ההונגרי", region: "מרכז העיר (פשט)", desc: "אחד מבנייני הפרלמנט המרשימים בעולם על שפת הדנובה.", web: "", map: "https://maps.google.com/?q=Hungarian+Parliament+Building" },
-        { id: 2, title: "באסטיון הדייגים (Fisherman's Bastion)", region: "בודה והגשרים", desc: "מבצר אגדי עם תצפית פנורמית עוצרת נשימה על העיר והנהר.", web: "", map: "https://maps.google.com/?q=Fisherman's+Bastion" },
-        { id: 3, title: "מרחצאות סצ'ני (Széchenyi Thermal Bath)", region: "מרכז העיר (פשט)", desc: "מתחם המרחצאות החמים הגדול באירופה, מושלם לחורף.", web: "", map: "https://maps.google.com/?q=Szechenyi+Thermal+Bath" },
-        { id: 4, title: "שוק חג המולד (במידה ופעיל)", region: "מרכז העיר (פשט)", desc: "דוכני אוכל חם, ייין חם (Mulled Wine) ועבודות יד.", web: "", map: "https://maps.google.com/?q=Vorosmarty+Square+Christmas+Market" }
+        { id: 1, title: "איי פי פי (Phi Phi Islands)", region: "פוקט והאיים", desc: "שייט עוצר נשימה בין צוקי גיר ומים צלולים.", web: "", map: "https://maps.google.com/?q=Phi+Phi+Islands" },
+        { id: 2, title: "מפרץ פאנג נגה (James Bond Island)", region: "פוקט והאיים", desc: "שמורת טבע מרהיבה עם סירות קאנו ונטיפים.", web: "", map: "https://maps.google.com/?q=Phang+Nga+Bay" },
+        { id: 3, title: "קניון MBK ומרכז בנגקוק", region: "בנגקוק והסביבה", desc: "מוקד קניות פופולרי וענק למשפחות.", web: "", map: "https://maps.google.com/?q=MBK+Center+Bangkok" },
+        { id: 4, title: "עולם הים בבנגקוק (Sea Life Bangkok)", region: "בנגקוק והסביבה", desc: "אקווריום עצום ומרשים בתוך קניון סיאם פאראגון.", web: "", map: "https://maps.google.com/?q=Sea+Life+Bangkok+Ocean+World" }
     ],
     defaultPacking: {
-        "יוסף": ["פספורט", "תעודת זהות", "מעיל חם", "סוודרים", "מכנס חם", "נעלי הליכה", "מטען", "כפפות וצעיף"],
-        "שירן": ["פספורט", "תעודת זהות", "מעיל חם", "צעיף וכפפות", "סוודרים", "נעלי הליכה", "תיק איפור", "מטען"],
-        "משותף": ["ביטוח נסיעות", "מטריות", "תרופות אישיות", "מתאם לחשמל", "תיק עזרה ראשונה קטן"]
+        "יוסף": ["דרכון ותעודת זהות", "בגדי קיץ קלילים", "בגדי ים", "נעלי הליכה נוחות", "כובע ומשקפי שמש", "מטען לפלאפון"],
+        "שירן": ["דרכון ותעודת זהות", "בגדי קיץ ושמלות", "בגדי ים", "נעלי הליכה וסנדלים", "תיק איפור ומוצרי טיפוח", "משקפי שמש וכובע"],
+        "הבן": ["דרכון", "חולצות טריקו ומכנסיים קצרים", "בגדי ים", "נעלי ספורט נוחות", "אוזניות וגאדג'טים", "מטען"],
+        "הבת": ["דרכון", "בגדי קיץ אופנתיים", "בגדי ים", "נעלי ספורט וסנדלים", "מוצרי טיפוח אישיים", "טלפון ומטען"],
+        "משותף": ["ביטוח נסיעות משפחתי", "ערכת עזרה ראשונה ותרופות", "קרם הגנה ודוחה יתושים", "מתאם חשמל אוניברסלי", "מטריות מתקפלות"]
     }
 };
 
@@ -838,6 +841,34 @@ function renderBucket() {
         table.innerHTML += `<tr><td><strong>${i.person}</strong></td><td>${i.wish}</td><td><button class="btn-danger" onclick="deleteBucketItem(${idx})">מחיקה</button></td></tr>`;
     });
 }
+
+// ==========================================
+// 🔗 EXPOSE FUNCTIONS TO GLOBAL WINDOW SCOPE
+// ==========================================
+window.showTab = showTab;
+window.openUserModal = openUserModal;
+window.setDeviceUser = setDeviceUser;
+window.toggleQuickChecklist = toggleQuickChecklist;
+window.addJournalEntry = addJournalEntry;
+window.deleteJournalEntry = deleteJournalEntry;
+window.addCustomEvent = addCustomEvent;
+window.deleteEvent = deleteEvent;
+window.switchAttrFilter = switchAttrFilter;
+window.toggleAttrSelection = toggleAttrSelection;
+window.addCustomAttraction = addCustomAttraction;
+window.deleteAttraction = deleteAttraction;
+window.switchMapRegion = switchMapRegion;
+window.convertCurrency = convertCurrency;
+window.addExpense = addExpense;
+window.deleteExpense = deleteExpense;
+window.switchPerson = switchPerson;
+window.togglePacking = togglePacking;
+window.addPackingItem = addPackingItem;
+window.editPackingItem = editPackingItem;
+window.movePackingItem = movePackingItem;
+window.deletePackingItem = deletePackingItem;
+window.addBucketItem = addBucketItem;
+window.deleteBucketItem = deleteBucketItem;
 
 window.onload = init;
 </script>
