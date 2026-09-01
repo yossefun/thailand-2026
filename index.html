@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -31,9 +30,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .user-banner button { background: var(--accent); border: none; padding: 4px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; width: auto; margin: 0; font-size: 0.85rem; color: #000; }
+    .countdown-badge { background: #0284c7; color: white; padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; }
 
     /* Hero Section */
     .hero {
@@ -183,9 +185,10 @@
 </head>
 <body>
 
-  <!-- Device User Banner -->
+  <!-- Device User & Countdown Banner -->
   <div class="user-banner">
     <div>👤 מכשיר זה מזוהה עבור: <strong id="currentDeviceUserLabel">לא הוגדר</strong></div>
+    <div id="countdownDisplay" class="countdown-badge">⏳ ספירה לאחור: טוען...</div>
     <button onclick="openUserModal()">החלף משתמש במכשיר</button>
   </div>
 
@@ -219,6 +222,8 @@
         <button class="tab-btn" onclick="showTab('expenses', this)">💰 הוצאות</button>
         <button class="tab-btn" onclick="showTab('packing', this)">🧳 ציוד</button>
         <button class="tab-btn" onclick="showTab('bucket', this)">⭐ חלומות</button>
+        <button class="tab-btn" onclick="showTab('smart-doc', this)">📄 ניהול מסמכים חכם</button>
+        <button class="tab-btn" onclick="showTab('important-docs', this)">📁 מסמכים חשובים</button>
     </div>
 
     <!-- 0. QUICK INFO TAB -->
@@ -503,9 +508,113 @@
         </div>
     </div>
 
+    <!-- 7. SMART DOCUMENT PROCESSING TAB -->
+    <div id="smart-doc" class="section-block">
+        <h2 class="section-title" style="margin-top:0;">📄 ניהול מסמכים ועדכון חכם</h2>
+        <p style="margin-bottom: 20px; color: var(--text-muted);">הזן או העלה פרטי מסמך והמערכת תעדכן אוטומטית את הטאב המתאים (הוצאות, אטרקציות, מלונות או לוח זמנים).</p>
+        
+        <div class="card-box">
+            <h3>➕ הוספת פרטי מסמך</h3>
+            <label>סוג המסמך:</label>
+            <select id="docType" onchange="toggleDocTypeFields()">
+                <option value="expense">💰 הוצאה (קבלה / חשבונית)</option>
+                <option value="attraction">🎡 אטרקציה</option>
+                <option value="hotel">🏨 מלון / לינה</option>
+            </select>
+
+            <label>כותרת / שם המסמך / מקום:</label>
+            <input type="text" id="docTitle" placeholder="למשל: קבלה מונית פוקט / מלון חדש">
+
+            <!-- Expense specific fields -->
+            <div id="expenseFields">
+                <label>סכום בבאט (THB):</label>
+                <input type="number" id="docCost" placeholder="0">
+                <label>קטגוריה:</label>
+                <select id="docCategory">
+                    <option value="אוכל">🍽️ אוכל</option>
+                    <option value="תחבורה">🚕 תחבורה</option>
+                    <option value="אטרקציות">🎟️ אטרקציות</option>
+                    <option value="קניות">🛍️ קניות</option>
+                    <option value="מלון">🏨 לינה</option>
+                </select>
+            </div>
+
+            <!-- Attraction / Hotel specific fields -->
+            <div id="travelFields" style="display:none;">
+                <label>תאריך (או תאריך התחלה):</label>
+                <input type="date" id="docStartDate">
+                <label>תאריך סיום (אופציונלי - למלון או פעילות מרובת ימים):</label>
+                <input type="date" id="docEndDate">
+                <label>אזור:</label>
+                <select id="docRegion">
+                    <option value="פוקט">פוקט</option>
+                    <option value="בנגקוק">בנגקוק</option>
+                </select>
+                <label>קישור למפה או אתר (רשות):</label>
+                <input type="text" id="docLink" placeholder="https://...">
+            </div>
+
+            <label style="margin-top:10px; display:block;">הערות נוספות / פרטים:</label>
+            <textarea id="docNotes" placeholder="פרטים נוספים..." rows="2"></textarea>
+
+            <button class="btn-main" onclick="processSmartDocument()" style="margin-top:15px;">בצע עיבוד ועכן מערכת אוטומטית</button>
+        </div>
+    </div>
+
+    <!-- 8. IMPORTANT DOCUMENTS TAB -->
+    <div id="important-docs" class="section-block">
+        <h2 class="section-title" style="margin-top:0;">📁 מסמכים חשובים</h2>
+        <p style="margin-bottom: 20px; color: var(--text-muted);">שמור כאן דרכונים, פוליסות ביטוח, כרטיסי טיסה ואישורים חשובים.</p>
+
+        <div class="card-box">
+            <h3>➕ הוספת מסמך חדש</h3>
+            <input type="text" id="impDocTitle" placeholder="שם המסמך (למשל: פוליסת ביטוח הראל / דרכון יוסף)">
+            <select id="impDocCategory">
+                <option value="דרכונים">🛂 דרכונים</option>
+                <option value="ביטוח">🛡️ ביטוח נסיעות</option>
+                <option value="טיסות וכרטיסים">✈️ טיסות וכרטיסים</option>
+                <option value="מלונות ואישורים">🏨 מלונות ואישורים</option>
+                <option value="אחר">📄 אחר</option>
+            </select>
+            <input type="text" id="impDocLink" placeholder="קישור למסמך (Google Drive / URL)">
+            <textarea id="impDocNotes" placeholder="הערות חשובות או פרטים מזהים..." rows="2"></textarea>
+            <button class="btn-main" onclick="addImportantDocument()">הוסף למסמכים חשובים</button>
+        </div>
+
+        <h3 style="margin-top:20px;">📋 רשימת המסמכים החשובים</h3>
+        <div class="table-container" style="margin-top:10px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>קטגוריה</th>
+                        <th>שם המסמך</th>
+                        <th>הערות / קישור</th>
+                        <th>פעולות</th>
+                    </tr>
+                </thead>
+                <tbody id="importantDocsTable"></tbody>
+            </table>
+        </div>
+    </div>
+
   </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAonzQOY2VMBGixq72OEWL_Vxc7sojqiZw",
+  authDomain: "trip-sync-app-27823.firebaseapp.com",
+  projectId: "trip-sync-app-27823",
+  storageBucket: "trip-sync-app-27823.firebasestorage.app",
+  messagingSenderId: "730419957169",
+  appId: "1:730419957169:web:f6ba227887f9877d934190"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 let selectedDate = "09.11.26";
 let currentPerson = "יוסף";
 let currentAttrFilter = "הכל";
@@ -524,10 +633,9 @@ const quickChecklistItems = [
     "מטענים וממתאמי שקע לתאילנד"
 ];
 
-let preflightStates = JSON.parse(localStorage.getItem('thailand_checklist_v4')) || {};
-
-// Dynamic schedule storage
-let defaultSchedule = JSON.parse(localStorage.getItem('thailand_schedule_v4')) || {
+// Default States
+let preflightStates = {};
+let defaultSchedule = {
     "09.11.26": { title: "הכנות אחרונות ואריזות", events: [] },
     "10.11.26": { title: "טיסה לפוקט (דרך אבו דאבי)", events: [{ title: "טיסה EY610 מנתב\"ג ב-06:20 ➔ אבו דאבי ➔ EY414 לפוקט (נחיתה 23:50)", type: "✈️ טיסה", time: "06:20", link: "" }] },
     "11.11.26": { title: "פוקט - התארגנות ומנוחה", events: [{ title: "צ'ק אין למלון והתרעננות", type: "🏨 מלון", time: "01:00", link: "" }] },
@@ -536,10 +644,7 @@ let defaultSchedule = JSON.parse(localStorage.getItem('thailand_schedule_v4')) |
     "24.11.26": { title: "חזרה לישראל", events: [{ title: "טיסה EY405 מבנגקוק ב-14:40 ➔ אבו דאבי ➔ EY599 לנחיתה בנתב\"ג ב-23:40", type: "✈️ טיסה", time: "14:40", link: "" }] }
 };
 
-// Journal storage
-let dailyJournals = JSON.parse(localStorage.getItem('thailand_journals_v4')) || {};
-
-// Attractions Database
+let dailyJournals = {};
 const defaultAttractions = [
     { id: 1, title: "Andamanda Phuket", region: "פוקט", desc: "פארק מים ענק חדש ומרשים עם מתקני אקסטרים ובריכות גלים.", web: "https://www.andamandaphuket.com", map: "https://maps.google.com/?q=Andamanda+Phuket" },
     { id: 2, title: "שייט לאיי פיפי (Phi Phi Islands)", region: "פוקט", desc: "סיור שייט יומי עם שנורקלינג בלגונות המדהימות.", web: "https://www.phuket.com/island/phiphi.htm", map: "https://maps.google.com/?q=Phi+Phi+Islands" },
@@ -551,10 +656,9 @@ const defaultAttractions = [
     { id: 8, title: "מתחם MBK Center", region: "בנגקוק", desc: "היעד המושלם לקניות בגדים, אלקטרוניקה ומזכרות במחירים נוחים.", web: "https://www.mbk-center.co.th", map: "https://maps.google.com/?q=MBK+Center" }
 ];
 
-let attractionsList = JSON.parse(localStorage.getItem('thailand_attractions_v1')) || defaultAttractions;
-let attractionSelections = JSON.parse(localStorage.getItem('thailand_attr_selections_v1')) || {};
+let attractionsList = defaultAttractions;
+let attractionSelections = {};
 
-// Packing Lists
 const defaultPersonalPacking = {
     "יוסף": ["פספורט", "חולצות קצרות", "מכנסיים קצרים", "תחתונים", "גרביים שחורות", "גרבי ספורט", "כובע קסקט", "מכנס לשינה", "אוזניות בלוטוס", "מטען נייד", "תחבושות, צמר גפן, קיסמים", "נעלי ספורט", "כפכפים", "גומיות", "גינסים", "לונג", "נרתיק למשקפי שמש", "מחצלת", "תיק צד", "מכונת תספורת", "סכין גילוח", "בושם", "חולצות ארוכות", "מגבונים", "שק כביסה", "מכנס מחויט", "חגורה שחורה", "קרדיגן שחור", "וסט שחור", "גקט עור", "מטען לשעון", "מנעול למזוודה", "ערכת טיסה", "דאודורנט", "משקפי שמש", "בקבוק מים", "דולרים", "יורו"],
     "שירן": ["פספורט", "בגד ים", "חולצות קצרות", "מכנסיים קצרים", "תחתונים", "גופיות", "נעלי ספורט", "כפכפים", "משקפי שמש", "חולצה ארוכה / ג'קט", "שק כביסה", "גומיות לשיער", "קרם לשיער", "תחתוניות / פדים", "מחליק שיער שירן", "תיק איפור שירן", "כלי רחצה", "גלולות שירן", "תיק גב", "אוזניות", "כובע"],
@@ -563,18 +667,86 @@ const defaultPersonalPacking = {
     "משותף": ["ביטוח חוץ", "נובימול", "חבילת גלישה", "ספריי הגנה", "פלסטרים", "אלוורה", "אופטלגין", "סלפט", "לחם לל\"ג", "טוסטר לאייל"]
 };
 
-let personalPacking = JSON.parse(localStorage.getItem('thailand_personal_packing_v5')) || defaultPersonalPacking;
-let packingStates = JSON.parse(localStorage.getItem('thailand_packing_states_v5')) || {};
-let expenses = JSON.parse(localStorage.getItem('thailand_expenses_v4')) || [];
-let bucketItems = JSON.parse(localStorage.getItem('thailand_bucket_v4')) || [];
+let personalPacking = defaultPersonalPacking;
+let packingStates = {};
+let expenses = [];
+let bucketItems = [];
+let importantDocs = [];
 
-function init() {
+// Sync functions with Firestore
+async function loadDataFromFirebase() {
+    try {
+        const docRef = doc(db, "trips", "thailand2026");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            preflightStates = data.preflightStates || preflightStates;
+            defaultSchedule = data.defaultSchedule || defaultSchedule;
+            dailyJournals = data.dailyJournals || dailyJournals;
+            attractionsList = data.attractionsList || attractionsList;
+            attractionSelections = data.attractionSelections || attractionSelections;
+            personalPacking = data.personalPacking || personalPacking;
+            packingStates = data.packingStates || packingStates;
+            expenses = data.expenses || expenses;
+            bucketItems = data.bucketItems || bucketItems;
+            importantDocs = data.importantDocs || importantDocs;
+        } else {
+            await saveDataToFirebase();
+        }
+    } catch (e) {
+        console.error("Error loading data from Firebase:", e);
+    }
+}
+
+async function saveDataToFirebase() {
+    try {
+        await setDoc(doc(db, "trips", "thailand2026"), {
+            preflightStates,
+            defaultSchedule,
+            dailyJournals,
+            attractionsList,
+            attractionSelections,
+            personalPacking,
+            packingStates,
+            expenses,
+            bucketItems,
+            importantDocs
+        });
+    } catch (e) {
+        console.error("Error saving data to Firebase:", e);
+    }
+}
+
+function updateCountdown() {
+    const targetDate = new Date('2026-11-10T06:20:00');
+    const now = new Date();
+    const diffTime = targetDate - now;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    const countdownEl = document.getElementById('countdownDisplay');
+    if (countdownEl) {
+        if (diffDays > 0) {
+            countdownEl.innerText = `⏳ עוד ${diffDays} ימים ליציאה!`;
+        } else if (diffDays === 0) {
+            countdownEl.innerText = `🎉 היום היציאה לחופשה!`;
+        } else {
+            countdownEl.innerText = `✈️ החופשה בעיצומה / הסתיימה`;
+        }
+    }
+}
+
+async function init() {
+    await loadDataFromFirebase();
     if (!deviceUser) {
         openUserModal();
     } else {
         updateDeviceUserDisplay();
     }
+    updateCountdown();
+    setInterval(updateCountdown, 1000 * 60 * 60); // update every hour
+
     document.getElementById('expDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('docStartDate').value = new Date().toISOString().split('T')[0];
     renderQuickChecklist();
     renderDateChips();
     renderDayContent();
@@ -584,11 +756,13 @@ function init() {
     renderExpenses();
     renderPersonalPacking();
     renderBucket();
+    renderImportantDocs();
 }
 
 function openUserModal() {
     document.getElementById('userModal').style.display = 'flex';
 }
+window.openUserModal = openUserModal;
 
 function setDeviceUser(name) {
     deviceUser = name;
@@ -597,6 +771,7 @@ function setDeviceUser(name) {
     updateDeviceUserDisplay();
     document.getElementById('bucketPerson').value = name;
 }
+window.setDeviceUser = setDeviceUser;
 
 function updateDeviceUserDisplay() {
     const lbl = document.getElementById('currentDeviceUserLabel');
@@ -611,6 +786,7 @@ function showTab(tabId, btn) {
     document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
 }
+window.showTab = showTab;
 
 function renderQuickChecklist() {
     const container = document.getElementById('quickChecklistGrid');
@@ -628,8 +804,9 @@ function renderQuickChecklist() {
 
 function toggleQuickChecklist(index) {
     preflightStates[index] = !preflightStates[index];
-    localStorage.setItem('thailand_checklist_v4', JSON.stringify(preflightStates));
+    saveDataToFirebase();
 }
+window.toggleQuickChecklist = toggleQuickChecklist;
 
 function renderDateChips() {
     const container = document.getElementById('dateChips');
@@ -663,7 +840,7 @@ function renderDayContent() {
             html += `<div style="background:#fff; border:1px solid var(--border); border-right:4px solid var(--accent); padding:12px 16px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
                 <div>
                     <strong style="color:var(--primary-dark)">[${e.time}] ${e.type}:</strong> ${e.title}
-                    ${e.link ? `<br><a href="${e.link}" target="_blank" style="font-size:0.85rem; color:var(--primary);">📍 מפה</a>` : ''}
+                    ${e.link ? `<br><a href="${e.link}" target="_blank" style="font-size:0.85rem; color:var(--primary);">📍 מפה / אתר</a>` : ''}
                 </div>
                 <button class="btn-danger" onclick="deleteEvent(${index})">מחיקה</button>
             </div>`;
@@ -686,10 +863,11 @@ function addJournalEntry() {
     const timestamp = new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
 
     dailyJournals[selectedDate].push({ author, text, timestamp });
-    localStorage.setItem('thailand_journals_v4', JSON.stringify(dailyJournals));
+    saveDataToFirebase();
     textInput.value = '';
     renderJournalEntries();
 }
+window.addJournalEntry = addJournalEntry;
 
 function renderJournalEntries() {
     const listContainer = document.getElementById('journalEntriesList');
@@ -719,10 +897,11 @@ function renderJournalEntries() {
 function deleteJournalEntry(idx) {
     if (confirm('למחוק רשומה זו מיומן המסע?')) {
         dailyJournals[selectedDate].splice(idx, 1);
-        localStorage.setItem('thailand_journals_v4', JSON.stringify(dailyJournals));
+        saveDataToFirebase();
         renderJournalEntries();
     }
 }
+window.deleteJournalEntry = deleteJournalEntry;
 
 function addCustomEvent() {
     const title = document.getElementById('eventTitle').value.trim();
@@ -736,21 +915,23 @@ function addCustomEvent() {
         defaultSchedule[selectedDate] = { title: "יום טיול", events: [] };
     }
     defaultSchedule[selectedDate].events.push({ title, type, time, link });
-    localStorage.setItem('thailand_schedule_v4', JSON.stringify(defaultSchedule));
+    saveDataToFirebase();
     
     document.getElementById('eventTitle').value = '';
     document.getElementById('eventTime').value = '';
     document.getElementById('eventLink').value = '';
     renderDayContent();
 }
+window.addCustomEvent = addCustomEvent;
 
 function deleteEvent(index) {
     if (confirm('למחוק אירוע זה?')) {
         defaultSchedule[selectedDate].events.splice(index, 1);
-        localStorage.setItem('thailand_schedule_v4', JSON.stringify(defaultSchedule));
+        saveDataToFirebase();
         renderDayContent();
     }
 }
+window.deleteEvent = deleteEvent;
 
 // Attractions Handling
 function switchAttrFilter(filter, btn) {
@@ -759,6 +940,7 @@ function switchAttrFilter(filter, btn) {
     btn.classList.add('active');
     renderAttractions();
 }
+window.switchAttrFilter = switchAttrFilter;
 
 function renderAttractions() {
     const container = document.getElementById('attractionsListContainer');
@@ -794,9 +976,10 @@ function renderAttractions() {
 
 function toggleAttrSelection(id) {
     attractionSelections[id] = !attractionSelections[id];
-    localStorage.setItem('thailand_attr_selections_v1', JSON.stringify(attractionSelections));
+    saveDataToFirebase();
     renderMapSelectedList();
 }
+window.toggleAttrSelection = toggleAttrSelection;
 
 function addCustomAttraction() {
     const title = document.getElementById('newAttrTitle').value.trim();
@@ -809,7 +992,7 @@ function addCustomAttraction() {
 
     const newId = Date.now();
     attractionsList.push({ id: newId, title, region, desc, web, map });
-    localStorage.setItem('thailand_attractions_v1', JSON.stringify(attractionsList));
+    saveDataToFirebase();
 
     document.getElementById('newAttrTitle').value = '';
     document.getElementById('newAttrDesc').value = '';
@@ -817,17 +1000,18 @@ function addCustomAttraction() {
     document.getElementById('newAttrMap').value = '';
     renderAttractions();
 }
+window.addCustomAttraction = addCustomAttraction;
 
 function deleteAttraction(id) {
     if (confirm('למחוק אטרקציה זו מהרשימה?')) {
         attractionsList = attractionsList.filter(item => item.id !== id);
         delete attractionSelections[id];
-        localStorage.setItem('thailand_attractions_v1', JSON.stringify(attractionsList));
-        localStorage.setItem('thailand_attr_selections_v1', JSON.stringify(attractionSelections));
+        saveDataToFirebase();
         renderAttractions();
         renderMapSelectedList();
     }
 }
+window.deleteAttraction = deleteAttraction;
 
 // Map Handling
 function switchMapRegion(region, btn) {
@@ -844,6 +1028,7 @@ function switchMapRegion(region, btn) {
     }
     renderMapSelectedList();
 }
+window.switchMapRegion = switchMapRegion;
 
 function renderMapSelectedList() {
     const container = document.getElementById('selectedAttractionsMapList');
@@ -878,6 +1063,7 @@ function convertCurrency() {
     const rate = parseFloat(document.getElementById('exchangeRate').value) || 9.5;
     document.getElementById('ilsResult').innerText = (thb / rate).toFixed(2);
 }
+window.convertCurrency = convertCurrency;
 
 function addExpense() {
     const date = document.getElementById('expDate').value;
@@ -889,19 +1075,21 @@ function addExpense() {
     if (!desc || isNaN(cost)) return alert('נא להזין תיאור וסכום');
 
     expenses.push({ date, desc, cost, cat, ils: (cost / rate).toFixed(2) });
-    localStorage.setItem('thailand_expenses_v4', JSON.stringify(expenses));
+    saveDataToFirebase();
     document.getElementById('expDesc').value = '';
     document.getElementById('expCost').value = '';
     renderExpenses();
 }
+window.addExpense = addExpense;
 
 function deleteExpense(index) {
     if (confirm('למחוק הוצאה זו?')) {
         expenses.splice(index, 1);
-        localStorage.setItem('thailand_expenses_v4', JSON.stringify(expenses));
+        saveDataToFirebase();
         renderExpenses();
     }
 }
+window.deleteExpense = deleteExpense;
 
 function renderExpenses() {
     const table = document.getElementById('expensesTable');
@@ -933,6 +1121,7 @@ function switchPerson(person, btn) {
     document.getElementById('personTitle').innerText = person;
     renderPersonalPacking();
 }
+window.switchPerson = switchPerson;
 
 function renderPersonalPacking() {
     const container = document.getElementById('personalPackingContainer');
@@ -971,14 +1160,14 @@ function editPackingItem(index) {
         if (packingStates[oldKey] !== undefined) {
             packingStates[newKey] = packingStates[oldKey];
             delete packingStates[oldKey];
-            localStorage.setItem('thailand_packing_states_v5', JSON.stringify(packingStates));
         }
 
         personalPacking[currentPerson][index] = trimmed;
-        localStorage.setItem('thailand_personal_packing_v5', JSON.stringify(personalPacking));
+        saveDataToFirebase();
         renderPersonalPacking();
     }
 }
+window.editPackingItem = editPackingItem;
 
 function movePackingItemUp(index) {
     if (index <= 0) return;
@@ -986,9 +1175,10 @@ function movePackingItemUp(index) {
     const temp = list[index];
     list[index] = list[index - 1];
     list[index - 1] = temp;
-    localStorage.setItem('thailand_personal_packing_v5', JSON.stringify(personalPacking));
+    saveDataToFirebase();
     renderPersonalPacking();
 }
+window.movePackingItemUp = movePackingItemUp;
 
 function movePackingItemDown(index) {
     const list = personalPacking[currentPerson];
@@ -996,14 +1186,16 @@ function movePackingItemDown(index) {
     const temp = list[index];
     list[index] = list[index + 1];
     list[index + 1] = temp;
-    localStorage.setItem('thailand_personal_packing_v5', JSON.stringify(personalPacking));
+    saveDataToFirebase();
     renderPersonalPacking();
 }
+window.movePackingItemDown = movePackingItemDown;
 
 function togglePacking(key) {
     packingStates[key] = !packingStates[key];
-    localStorage.setItem('thailand_packing_states_v5', JSON.stringify(packingStates));
+    saveDataToFirebase();
 }
+window.togglePacking = togglePacking;
 
 function addPackingItem() {
     const input = document.getElementById('newPackingItem');
@@ -1011,18 +1203,20 @@ function addPackingItem() {
     if (!val) return;
     if (!personalPacking[currentPerson]) personalPacking[currentPerson] = [];
     personalPacking[currentPerson].push(val);
-    localStorage.setItem('thailand_personal_packing_v5', JSON.stringify(personalPacking));
+    saveDataToFirebase();
     input.value = '';
     renderPersonalPacking();
 }
+window.addPackingItem = addPackingItem;
 
 function deletePackingItem(index) {
     if (confirm('למחוק פריט זה מהרשימה?')) {
         personalPacking[currentPerson].splice(index, 1);
-        localStorage.setItem('thailand_personal_packing_v5', JSON.stringify(personalPacking));
+        saveDataToFirebase();
         renderPersonalPacking();
     }
 }
+window.deletePackingItem = deletePackingItem;
 
 function addBucketItem() {
     const person = document.getElementById('bucketPerson').value.trim();
@@ -1030,18 +1224,20 @@ function addBucketItem() {
     if (!person || !wish) return alert('נא למלא שם ומשאלה');
 
     bucketItems.push({ person, wish });
-    localStorage.setItem('thailand_bucket_v4', JSON.stringify(bucketItems));
+    saveDataToFirebase();
     document.getElementById('bucketWish').value = '';
     renderBucket();
 }
+window.addBucketItem = addBucketItem;
 
 function deleteBucketItem(index) {
     if (confirm('למחוק יעד זה?')) {
         bucketItems.splice(index, 1);
-        localStorage.setItem('thailand_bucket_v4', JSON.stringify(bucketItems));
+        saveDataToFirebase();
         renderBucket();
     }
 }
+window.deleteBucketItem = deleteBucketItem;
 
 function renderBucket() {
     const table = document.getElementById('bucketListTable');
@@ -1052,6 +1248,143 @@ function renderBucket() {
             <td>${i.wish}</td>
             <td><button class="btn-danger" onclick="deleteBucketItem(${idx})">מחיקה</button></td>
         </tr>`;
+    });
+}
+
+// Smart Document Processing Functions
+function toggleDocTypeFields() {
+    const type = document.getElementById('docType').value;
+    const expenseFields = document.getElementById('expenseFields');
+    const travelFields = document.getElementById('travelFields');
+
+    if (type === 'expense') {
+        expenseFields.style.display = 'block';
+        travelFields.style.display = 'none';
+    } else {
+        expenseFields.style.display = 'none';
+        travelFields.style.display = 'block';
+    }
+}
+window.toggleDocTypeFields = toggleDocTypeFields;
+
+function formatDateToAppFormat(dateStr) {
+    if (!dateStr) return "";
+    const parts = dateStr.split('-'); // YYYY-MM-DD
+    if (parts.length === 3) {
+        return `${parts[2]}.${parts[1]}.${parts[0].slice(2)}`;
+    }
+    return dateStr;
+}
+
+function processSmartDocument() {
+    const type = document.getElementById('docType').value;
+    const title = document.getElementById('docTitle').value.trim();
+    const notes = document.getElementById('docNotes').value.trim();
+
+    if (!title) return alert('נא להזין כותרת או שם למסמך');
+
+    if (type === 'expense') {
+        const cost = parseFloat(document.getElementById('docCost').value);
+        const category = document.getElementById('docCategory').value;
+        const rate = parseFloat(document.getElementById('exchangeRate').value) || 9.5;
+
+        if (isNaN(cost) || cost <= 0) return alert('נא להזין סכום תקין להוצאה');
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        expenses.push({ date: todayStr, desc: title + (notes ? ` (${notes})` : ''), cost, cat: category, ils: (cost / rate).toFixed(2) });
+        saveDataToFirebase();
+        renderExpenses();
+        alert('✅ ההוצאה נוספה בהצלחה ונקלטה בטאב ההוצאות!');
+    } else {
+        // Attraction or Hotel
+        const startDateVal = document.getElementById('docStartDate').value;
+        const region = document.getElementById('docRegion').value;
+        const link = document.getElementById('docLink').value.trim();
+
+        if (!startDateVal) return alert('נא לבחור תאריך');
+
+        const formattedDate = formatDateToAppFormat(startDateVal);
+
+        // Add to attractions list as well
+        const newId = Date.now();
+        attractionsList.push({ id: newId, title, region, desc: notes || (type === 'hotel' ? 'מלון / לינה' : 'אטרקציה חדשה'), web: link, map: link });
+        attractionSelections[newId] = true; // Auto select for map
+
+        // Add to schedule
+        if (!defaultSchedule[formattedDate]) {
+            defaultSchedule[formattedDate] = { title: type === 'hotel' ? 'הגעה למלון' : 'פעילות / אטרקציה', events: [] };
+        }
+        defaultSchedule[formattedDate].events.push({
+            title: `${type === 'hotel' ? '🏨 מלון: ' : '🎡 אטרקציה: '}${title}${notes ? ' - ' + notes : ''}`,
+            type: type === 'hotel' ? '🏨 מלון' : '🎡 אטרקציה',
+            time: '09:00',
+            link: link
+        });
+
+        saveDataToFirebase();
+        renderAttractions();
+        renderMapSelectedList();
+        renderDayContent();
+        alert(`✅ ${type === 'hotel' ? 'המלון' : 'האטרקציה'} עודכנו בהצלחה בלוח הזמנים בתאריך ${formattedDate} וברשימות!`);
+    }
+
+    document.getElementById('docTitle').value = '';
+    document.getElementById('docNotes').value = '';
+    document.getElementById('docCost').value = '';
+}
+window.processSmartDocument = processSmartDocument;
+
+// Important Documents Functions
+function addImportantDocument() {
+    const title = document.getElementById('impDocTitle').value.trim();
+    const category = document.getElementById('impDocCategory').value;
+    const link = document.getElementById('impDocLink').value.trim();
+    const notes = document.getElementById('impDocNotes').value.trim();
+
+    if (!title) return alert('נא להזין את שם המסמך');
+
+    importantDocs.push({ title, category, link, notes });
+    saveDataToFirebase();
+    renderImportantDocs();
+
+    document.getElementById('impDocTitle').value = '';
+    document.getElementById('impDocLink').value = '';
+    document.getElementById('impDocNotes').value = '';
+    alert('✅ המסמך נוסף לרשימת המסמכים החשובים בהצלחה!');
+}
+window.addImportantDocument = addImportantDocument;
+
+function deleteImportantDoc(index) {
+    if (confirm('למחוק מסמך זה?')) {
+        importantDocs.splice(index, 1);
+        saveDataToFirebase();
+        renderImportantDocs();
+    }
+}
+window.deleteImportantDoc = deleteImportantDoc;
+
+function renderImportantDocs() {
+    const table = document.getElementById('importantDocsTable');
+    if (!table) return;
+    table.innerHTML = '';
+
+    if (importantDocs.length === 0) {
+        table.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">טרם נוספו מסמכים חשובים.</td></tr>`;
+        return;
+    }
+
+    importantDocs.forEach((docItem, idx) => {
+        table.innerHTML += `
+            <tr>
+                <td><strong>${docItem.category}</strong></td>
+                <td>${docItem.title}</td>
+                <td>
+                    ${docItem.notes ? `<div>${docItem.notes}</div>` : ''}
+                    ${docItem.link ? `<a href="${docItem.link}" target="_blank" class="link-btn" style="margin-top:4px; display:inline-block;">🔗 קישור למסמך</a>` : ''}
+                </td>
+                <td><button class="btn-danger" onclick="deleteImportantDoc(${idx})">מחיקה</button></td>
+            </tr>
+        `;
     });
 }
 
